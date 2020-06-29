@@ -34,12 +34,12 @@ app.use('/ll', (req, res, next) => {
   
   mongoose
     .connect(
-      'mongodb+srv://krati:krati@cluster0-vccpc.mongodb.net/Quiz?retryWrites=true&w=majority'
+      'mongodb://krati:krati@cluster0-shard-00-00-vccpc.mongodb.net:27017,cluster0-shard-00-01-vccpc.mongodb.net:27017,cluster0-shard-00-02-vccpc.mongodb.net:27017/Quiz?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority'
     )
     .then(result => {
         console.log("res->" + result);
 
-      app.listen(5000);
+      app.listen(3000);
     })
     .catch(err => console.log("err->"+err));
     //app.listen(5000);
