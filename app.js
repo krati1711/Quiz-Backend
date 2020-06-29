@@ -9,7 +9,7 @@ const authRoutes = require('./routes/adminRoutes');
 
 app.use(bodyParser.json()); 
 
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
       'Access-Control-Allow-Methods',
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
     );
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
-  });*/
+  });
 
 app.use((error, req, res, next) => {
     console.log(error);

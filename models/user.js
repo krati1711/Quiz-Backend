@@ -12,4 +12,4 @@ const userSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('AdminLogin', userSchema);
+module.exports = mongoose.model('AdminLogin', userSchema, 'AdminLogin');
