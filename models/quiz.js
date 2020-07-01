@@ -10,7 +10,13 @@ const quizSchema = new Schema({
         type: Date,
         default: Date.now,
         required: true
+    },
+  questions: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Questions'
     }
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Quizzes', quizSchema, 'Quizzes');

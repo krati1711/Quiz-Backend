@@ -6,16 +6,15 @@ const Quiz = require('../models/quiz');
 
 exports.addQuestion = (req, res, next) => {
     const actualquestion = req.body.question;
-    const option1 = req.body.option1;
-    const option2 = req.body.option2;
-    const answer = req.body.answer;
+    const correctAnswer = req.body.correct_answer;
+    const wrongAnswer = req.body.wrong_answer;
     const quizid = req.body.quizId;
+
 
     const question = new Question({
         question: actualquestion,
-        option1: option1,
-        option2: option2,
-        answer: answer,
+        correct_answer: correctAnswer,
+        incorrect_answer: wrongAnswer,
         quizname: quizid
     });
 

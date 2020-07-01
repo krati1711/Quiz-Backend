@@ -6,7 +6,7 @@ const questionSchema = new Schema({
         type: String,
         required: true
     },
-    option1: {
+    /*option1: {
         type: String,
         required: true
     },
@@ -15,6 +15,14 @@ const questionSchema = new Schema({
         required: true
     },
     answer: {
+        type: String,
+        required: true
+    },*/
+    correct_answer: {
+        type: String,
+        required: true
+    },
+    incorrect_answer: {
         type: String,
         required: true
     },
