@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const Question = require('../models/questions');
 const Quiz = require('../models/quiz');
@@ -6,15 +6,15 @@ const Quiz = require('../models/quiz');
 
 exports.addQuestion = (req, res, next) => {
     const actualquestion = req.body.question;
-    const correctAnswer = req.body.correct_answer;
-    const wrongAnswer = req.body.wrong_answer;
+    const answer = req.body.answer;
+    const options = req.body.options;
     const quizid = req.body.quizId;
 
 
     const question = new Question({
         question: actualquestion,
-        correct_answer: correctAnswer,
-        incorrect_answer: wrongAnswer,
+        answer: answer,
+        options: options,
         quizname: quizid
     });
 
@@ -38,3 +38,22 @@ exports.addQuestion = (req, res, next) => {
             next(err);
         });
 };
+
+exports.getQuestionsPerQuiz = (req, res ,next) => {
+    const quizid = req.params.quizid;
+    console.log(quizid);
+    Question
+        .find( { 'quizname' : quizid})
+        .then(quizes => {
+            res.status(200).json({
+              message: 'Got All Quiz for that question',
+              quizes: quizes
+            });
+          })
+        .catch(err => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
+        });
+  }

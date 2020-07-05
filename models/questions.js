@@ -18,12 +18,13 @@ const questionSchema = new Schema({
         type: String,
         required: true
     },*/
-    correct_answer: {
+    answer: {
         type: String,
         required: true
     },
-    incorrect_answer: {
-        type: String,
+    options: {
+        type: Array,
+        default: [],
         required: true
     },
     quizname: {
