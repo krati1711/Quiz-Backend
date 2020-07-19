@@ -41,7 +41,13 @@ exports.addQuestion = (req, res, next) => {
 
 exports.getQuestionsPerQuiz = (req, res ,next) => {
     const quizid = req.params.quizid;
-    console.log(quizid);
+    
+    if (quizid === 'undefined' || quizid == null) {
+        
+        res.status(403).json({ message: 'invalid quizid'});
+        next();
+        return;
+    }
     Question
         .find( { 'quizname' : quizid})
         .then(quizes => {
