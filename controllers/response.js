@@ -68,6 +68,7 @@ exports.registerQuizResponse = (req, res, next) => {
     responses.forEach(response => {
         const tempResponse = new Response({
             questionid: response.questionid,
+            question: response.question,
             chosenAnswer: response.chosenAnswer,
             answered: response.answered,
             timetaken: response.timeTaken,
@@ -142,7 +143,7 @@ exports.getStudentsperQuiz = (req, res, next) => {
               }
               userObjs.push(tempObj);
           });
-          res.status(200).json({ message: 'We will wait', student: userObjs, status: 'succuess'});
+          res.status(200).json({ message: 'We will wait', student: userObjs, status: 'success'});
       })
       .catch(err => {
           console.log("Error saving final response - "+ err);

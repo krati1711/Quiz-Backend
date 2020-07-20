@@ -7,6 +7,10 @@ const responseSchema = new Schema({
         ref: 'Questions',
         required: true
     },
+    question: {
+        type: String,
+        required: true
+    },
     chosenAnswer: {
         type: String,
         required: true

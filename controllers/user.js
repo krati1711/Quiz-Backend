@@ -73,14 +73,17 @@ exports.userResponse = (req, res, next) => {
     const userid = req.params.userid;
     const quizid = req.params.quizid;
 
+    console.log(userid , ' ' , quizid);
     let user;
 
     User.findById(userid)
         .then(result => {
+            console.log('result1 - ' + result);
             user = result;
             return QuizResponse.find({ username: user._id, quizid: quizid })
         })
         .then(result => {
+            console.log('result2 - ' + result);
             return Response.find().where('_id').in(result[0].responses).exec();
         })
         .then(result => {

@@ -31,7 +31,7 @@ exports.getAllQuiz = (req, res ,next) => {
         .find({ isDeleted: false})
         .then(quizes => {
             res.status(200).json({
-              message: 'All Quizzes are present madam.',
+              message: 'All Quizzes are present.',
               quizes: quizes
             });
           })
