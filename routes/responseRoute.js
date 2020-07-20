@@ -7,5 +7,6 @@ const responseController = require('../controllers/response');
 const router = express.Router();
 
 router.post('/registerResponse', responseController.registerQuizResponse);
+router.get('/getResponseperQuiz/:quizid', responseController.getStudentsperQuiz);
 
 module.exports = router;

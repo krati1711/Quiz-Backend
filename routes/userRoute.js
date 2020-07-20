@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.post('/registerUser', userController.registerUser);
 router.post('/loginUser', userController.loginUser);
+router.get('/userResponse/:userid&:quizid', userController.userResponse);
 
 module.exports = router;

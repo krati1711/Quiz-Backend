@@ -11,6 +11,10 @@ const responseSchema = new Schema({
         type: String,
         required: true
     },
+    correctAnswer: {
+        type: String,
+        required: true
+    },
     timetaken: {
         type: Number,
         required: true

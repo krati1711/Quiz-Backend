@@ -70,7 +70,8 @@ exports.registerQuizResponse = (req, res, next) => {
             questionid: response.questionid,
             chosenAnswer: response.chosenAnswer,
             answered: response.answered,
-            timetaken: response.timeTaken
+            timetaken: response.timeTaken,
+            correctAnswer: response.correctAnswer
         });
         responsObjs.push(tempResponse);
     });
@@ -120,28 +121,34 @@ exports.registerQuizResponse = (req, res, next) => {
     }); */
 }
 
-const responseFunction = (responses) => {
-    let responsObjs;
-      responses.forEach(response => {
-        const tempResponse = new Response({
-            questionid: response.questionid,
-            chosenAnswer: response.chosenAnswer,
-            answered: response.answered,
-            timetaken: response.timeTaken
-        });
-
-        tempResponse.save().then(result => {
-            console.log("response result1 - " + result);
-            responsObjs.push(result.id);
-        })
-        .catch(err => {
-            console.log(" Error pushing responses - " + err);
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            // next(err);
-        });
-    });
-
-    return responsObjs;
-}
+exports.getStudentsperQuiz = (req, res, next) => {
+    
+    const quizid = req.params.quizid;
+    let userIds = [];
+    let userObjs = [];
+    QuizResponse.find({quizid: quizid})
+      .then (result => {
+          if (!result) {
+              res.status(404).json({ message: 'Quiz not found', status: 'fail'});
+          }
+          userIds = result.map( x => x.username);
+          return User.find().where('_id').in(userIds).exec();
+      })
+      .then(result => {
+          result.forEach(x => {
+              tempObj = {
+                  userid: x._id,
+                  name: x.name
+              }
+              userObjs.push(tempObj);
+          });
+          res.status(200).json({ message: 'We will wait', student: userObjs, status: 'succuess'});
+      })
+      .catch(err => {
+          console.log("Error saving final response - "+ err);
+          if (!err.statusCode) {
+              err.statusCode = 500;
+          }
+          next(err);
+      });
+  };
