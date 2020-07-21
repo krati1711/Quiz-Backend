@@ -1,25 +1,42 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
+
+const Admin = require('../models/admin');
+const User = require('../models/user');
+
+const RSA_PUBLIC_KEY = fs.readFileSync(path.join(__dirname, '../' , 'keys') + '/public.key','utf8');
 
 module.exports = (req, res, next) => {
-  const authHeader = req.get('Authorization');
-  if (!authHeader) {
-    const error = new Error('Not authenticated.');
-    error.statusCode = 401;
-    throw error;
-  }
-  const token = authHeader.split(' ')[1];
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'somesupersecretsecret');
-  } catch (err) {
-    err.statusCode = 500;
-    throw err;
-  }
-  if (!decodedToken) {
-    const error = new Error('Not authenticated.');
-    error.statusCode = 401;
-    throw error;
-  }
-  req.userId = decodedToken.userId;
-  next();
-};
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).json({message: 'No Header Found'});
+        return;
+    }
+    const token = authHeader.split(' ')[1];
+    let decodedToken;
+
+    try{
+        decodedToken = jwt.verify(token, RSA_PUBLIC_KEY, {algorithms: ['RS256']});
+        console.log(token);
+        if (!decodedToken) {
+            res.status(401).json({message: 'No good token found'});
+            return;
+        }
+        Admin.find({username: decodedToken.uname})
+        .then(result => {
+          if (result){
+            next();
+            return;
+          }
+          //User.find({username: decodedToken.uname})
+        })
+        .catch(err => {
+          res.status(401).json({message: 'Not Authorized'});
+        });
+    }
+    catch (err) {
+        res.status(500).json({message: 'Not Authenticated'});
+        return;
+    }
+}

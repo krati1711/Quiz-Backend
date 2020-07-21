@@ -3,10 +3,11 @@ const { body } = require('express-validator');
 
 const QuizResponse = require('../models/quizresponse');
 const responseController = require('../controllers/response');
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
 router.post('/registerResponse', responseController.registerQuizResponse);
-router.get('/getResponseperQuiz/:quizid', responseController.getStudentsperQuiz);
+router.get('/getResponseperQuiz/:quizid', isAuth, responseController.getStudentsperQuiz);
 
 module.exports = router;

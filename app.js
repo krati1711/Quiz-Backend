@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const winston = require('winston');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -12,6 +13,9 @@ const quizRoutes = require('./routes/quizRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const userRoutes = require('./routes/userRoute');
 const responseRoutes = require('./routes/responseRoute');
+
+//to disable header used to find if server is express prevent express related attacks()
+app.disable('x-powered-by');
 
 // logger 
 const logger = winston.createLogger({
@@ -31,6 +35,7 @@ const logger = winston.createLogger({
 app.use(bodyParser.json());
 
 app.use(cors());
+app.use(helmet());
 
 /*app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
