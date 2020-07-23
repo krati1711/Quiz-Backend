@@ -91,7 +91,6 @@ exports.registerQuizResponse = (req, res, next) => {
         return quizResponseObj.save();
     })
     .then(result => {
-        console.log(result);
         res.status(201).json({ message: 'Quiz Response Created!', status: 'All Good' });
     })
     .catch(err => {

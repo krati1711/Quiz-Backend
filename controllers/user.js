@@ -14,10 +14,10 @@ exports.registerUser = (req, res, next) => {
     const age = req.body.age;
     const gender = req.body.gender;
     const username = name.substring(0, 3) + name.substring(name.length - 3, name.length);
-    User.findOne({ email: email })
+    User.findOne({ username: username })
         .then(user => {
             if (user) {
-                res.status(200).json({ status: 'email already present', mystatuscode: 0 });
+                return res.status(200).json({ status: 'username already present', mystatuscode: 0 });
                 next();
             }
             else {
@@ -33,7 +33,7 @@ exports.registerUser = (req, res, next) => {
         })
         .then(result => {
             const token = generateAccessToken(result.name);
-            res.status(201).json({ message: 'New User Created!', username: result.id, name: result.name, mystatuscode: 1, token: token });
+            res.status(201).json({ message: 'New User Created!', username: result.id, name: result.name, uname: result.username, mystatuscode: 1, token: token });
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -45,15 +45,28 @@ exports.registerUser = (req, res, next) => {
 
 exports.loginUser = (req, res, next) => {
     const name = req.body.name;
+    const quizid = req.body.quizid;
+    let tempuser;
 
     User.findOne({ username: name })
         .then(user => {
             if (!user) {
-                res.status(200).json({ status: 'No such username present. Register first', mystatuscode: 0 });
+                return res.status(200).json({ status: 'No such username present. Register first', mystatuscode: 0 });
             }
-            else {
-                const token = generateAccessToken(user.name);
-                res.status(201).json({ message: 'User Found!', username: user.id, name: user.name, mystatuscode: 1, token: token });
+            // else {
+            //     const token = generateAccessToken(user.name);
+            //     res.status(201).json({ message: 'User Found!', username: user.id, name: user.name, mystatuscode: 1, token: token });
+            // }
+            tempuser = user;
+            return QuizResponse.find({username: user.id}).where({quizid: quizid}).exec()
+        })
+        .then(result => {
+            if (result.length){
+                return res.status(200).json({ status: 'Quiz Already Given', mystatuscode: 2 });
+            }
+            else{
+                const token = generateAccessToken(tempuser.name);
+                res.status(201).json({ message: 'User Found!', username: tempuser.id, name: tempuser.name, mystatuscode: 1, token: token });
             }
         })
         .catch(err => {
@@ -72,18 +85,15 @@ function generateAccessToken(username) {
 exports.userResponse = (req, res, next) => {
     const userid = req.params.userid;
     const quizid = req.params.quizid;
-
-    console.log(userid , ' ' , quizid);
+    
     let user;
 
     User.findById(userid)
         .then(result => {
-            console.log('result1 - ' + result);
             user = result;
             return QuizResponse.find({ username: user._id, quizid: quizid })
         })
         .then(result => {
-            console.log('result2 - ' + result);
             return Response.find().where('_id').in(result[0].responses).exec();
         })
         .then(result => {

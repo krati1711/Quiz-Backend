@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
 
     try{
         decodedToken = jwt.verify(token, RSA_PUBLIC_KEY, {algorithms: ['RS256']});
-        console.log(token);
         if (!decodedToken) {
             res.status(401).json({message: 'No good token found'});
             return;

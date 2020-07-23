@@ -49,8 +49,6 @@ app.use(helmet());
 
 
 app.use((error, req, res, next) => {
-    console.log("---------------------------------------------yaha aaya mai");
-    console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
